@@ -50,7 +50,7 @@
     <Compile Include="Signals\NoiseSignal.cs" />
     <Compile Include="Signals\SawtoothSignal.cs" />
     <Compile Include="Signals\Signal.cs" />
-    <Compile Include="Signals\SinSignal.cs" />
+    <Compile Include="Signals\SinusSignal.cs" />
     <Compile Include="Signals\TriangleSignal.cs" />
   </ItemGroup>
   <ItemGroup />

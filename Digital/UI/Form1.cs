@@ -31,6 +31,7 @@ namespace UI
             ConfigureAxis(chart1.ChartAreas[0].AxisX);
             ConfigureAxis(chart1.ChartAreas[0].AxisY);
 
+
             data1 = new Data(2, 2, 0, 0.5);
             data2 = new Data(1, 10, 0, 0.5);
         }
@@ -47,12 +48,12 @@ namespace UI
         private void CreateChartFunction()
         {
             chart1.Series[0].Points.Clear();
-            double x;
+            double x, func;
 
             for (int n = 0; n < SampleRate * Seconds; n++)
             {
                 x = (double)n / SampleRate;
-                var func = signal.GetSignalVolume(x);
+                func = signal.GetVolume(x);
 
                 chart1.Series[0].Points.AddXY(x, func);
             }
@@ -76,7 +77,7 @@ namespace UI
             switch (x)
             {
                 case 0:
-                    signal = new SinSignal(data1);
+                    signal = new SinusSignal(data1);
                     break;
                 case 1:
                     signal = new ImpulseSignal(data1);
@@ -91,7 +92,9 @@ namespace UI
                     signal = new NoiseSignal(data1);
                     break;
                 case 5: 
-                    signal = new PolygarmonicSignal(new SinSignal(data1), new SinSignal(data2));
+                    signal = new PolygarmonicSignal(
+                        new SinusSignal(data1), 
+                        new SinusSignal(data2));
                     break;
             }
             CreateChartFunction();
@@ -103,16 +106,24 @@ namespace UI
             switch (x)
             {
                 case 1:
-                    values = GetModulationSignal(new SinSignal(data1), new SinSignal(data2));
+                    values = GetModulationSignal(
+                        new SinusSignal(data1), 
+                        new SinusSignal(data2));
                     break;
                 case 2:
-                    values = GetModulationSignal(new TriangleSignal(data1), new SinSignal(data2));
+                    values = GetModulationSignal(
+                        new TriangleSignal(data1), 
+                        new SinusSignal(data2));
                     break;
                 case 3:
-                    values = GetModulationSignal(new SinSignal(data1), new ImpulseSignal(data2));
+                    values = GetModulationSignal(
+                        new SinusSignal(data1), 
+                        new ImpulseSignal(data2));
                     break;
                 case 4:
-                    values = GetModulationSignal(new TriangleSignal(data1), new ImpulseSignal(data2));
+                    values = GetModulationSignal(
+                        new TriangleSignal(data1), 
+                        new ImpulseSignal(data2));
                     break;
                 default:
                     values = new double[1];
@@ -127,8 +138,10 @@ namespace UI
         {
             if (IsAmplitude)
             {
-                return Modulation.Amplitude(modulatorSignal, carrierSignal,
-                    SampleRate, Seconds);
+#pragma warning disable CS0162 // Unreachable code detected
+                return Modulation.Amplitude(modulatorSignal, 
+                    carrierSignal, SampleRate, Seconds);
+#pragma warning restore CS0162 // Unreachable code detected                 
             }
             else
             {

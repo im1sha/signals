@@ -15,7 +15,6 @@ namespace Sound
         private const int Channels = 1;
 
         private const string Extension = "wav";
-        private const string directory = @"E:\Study\4_Course\ЦОС\Lab_work\DSP\Digital\SignalSound";
 
         public string FileName { get; set; } = "example";
 
@@ -36,7 +35,7 @@ namespace Sound
             for (int n = 0; n < SampleRate * Seconds; n++)
             {
                 var x = (double) n / SampleRate;
-                var sampleValue = signal.GetSignalValue(x);
+                var sampleValue = signal.GetNormalizedSignalValue(x);
                 var sample = (short) (sampleValue * MaxValue);
                 var bytes = BitConverter.GetBytes(sample);
 
@@ -88,7 +87,7 @@ namespace Sound
         private void SaveToFile(RawSourceWaveStream rs)
         {
             WaveFileWriter.CreateWaveFile(
-                $"{directory}\\{FileName}.{Extension}", rs);
+                $"{Directory.GetCurrentDirectory()}\\{FileName}.{Extension}", rs);
         }
 
         private void PlayMusic(RawSourceWaveStream rs)

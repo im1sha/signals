@@ -2,8 +2,8 @@
 {
     public interface ISignal
     {
-        double GetSignalVolume(double time);
+        double GetVolume(double time);
 
-        double GetSignalValue(double time);
+        double GetNormalizedSignalValue(double time);
     }
 }

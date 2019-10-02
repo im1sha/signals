@@ -15,20 +15,20 @@ namespace Signals
             AmplitudeSum = GetAmplitude();
         }
 
-        public double GetSignalVolume(double time)
+        public double GetVolume(double time)
         {
             double value = 0;
             foreach (var signal in signals)
             {
-                value += signal.GetSignalVolume(time);
+                value += signal.GetVolume(time);
             }
 
             return value;
         }
 
-        public double GetSignalValue(double time)
+        public double GetNormalizedSignalValue(double time)
         {
-            return GetSignalVolume(time) / AmplitudeSum;
+            return GetVolume(time) / AmplitudeSum;
         }
 
         private double GetAmplitude()

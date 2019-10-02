@@ -4,25 +4,18 @@ namespace Signals.Signals
 {
     public class ImpulseSignal : Signal
     {
-        public double DutyFactor { get; set; }
+        public double DutyFactor { get; }
 
         public ImpulseSignal(Data data) : base(data)
         {
-            this.DutyFactor = data.DutyFactor;
+            DutyFactor = data.DutyFactor;
         }
 
-        protected internal override double GetValue(double fi)
+        protected internal override double ApplyFunction(double phi)
         {
-            var sin = Math.Sin(fi) + 1;
-
-            return sin >= 2 - 2 * DutyFactor
+            return Math.Sin(phi) + 1 >= 2 * (1 - DutyFactor)
                 ? 1
                 : 0;
-            //: -1;
-
-            //var sin = Math.Sin(GetFormula(time));
-
-            //return Math.Sign(sin);
         }
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Signals.Signals
 {
-    public class SawtoothSignal : TriangleSignal
+    public class SinusSignal : Signal
     {
-        public SawtoothSignal(Data data) : base(data)
+        public SinusSignal(Data data) : base(data)
         {
         }
 
         protected internal override double ApplyFunction(double phi)
         {
-            return Math.Atan(Math.Tan(phi / 2)) / HALF_OF_PI;
+            return Math.Sin(phi);
         }
     }
 }

@@ -4,17 +4,18 @@ namespace Signals.Signals
 {
     public class NoiseSignal : Signal
     {
-        private static readonly Random Random = new Random();
-        private const double MinValue = -1;
-        private const double MaxValue = 1;
+        private static readonly Random _random = new Random();
+        private const double _minValue = -1;
+        private const double _maxValue = 1;
 
         public NoiseSignal(Data data) : base(data)
         {
         }
 
-        protected internal override double GetValue(double fi)
+        protected internal override double ApplyFunction(double phi)
         {
-            return Random.NextDouble() * (MaxValue - MinValue) + MinValue;
+            return _random.NextDouble() * (_maxValue - _minValue) 
+                + _minValue;
         }
     }
 }

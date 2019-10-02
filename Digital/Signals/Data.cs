@@ -6,7 +6,7 @@
 
         public double Frequency { get; }
 
-        public double DutyFactor { get; }
+        public double DutyFactor { get; } // скважность
 
         public double StartPhase { get; }
 

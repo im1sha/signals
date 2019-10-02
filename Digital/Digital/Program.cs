@@ -1,6 +1,4 @@
-﻿using System;
-using Signals;
-//using Signals.Modulation;
+﻿using Signals;
 using Signals.Signals;
 using Sound;
 
@@ -17,10 +15,10 @@ namespace Digital
             //Data data1 = new Data(2, 1, 0, 0.25);
             //Data data2 = new Data(1, 800, 0, 0.5);
 
-            Data data1 = new Data(1, 2, 0, 0.5);
-            Data data2 = new Data(1, 600, 0, 0.5);
+            Data data1 = new Data(1, 2, 0.5, 0.5);
+            Data data2 = new Data(1, 600, 0.5, 0.5);
 
-            Signal signal1 = new SinSignal(data1);
+            Signal signal1 = new SinusSignal(data1);
             Signal signal2 = new ImpulseSignal(data2);
 
             //ISignal amplitudeModulation = new AmplitudeModulationSignal(modulatorSignal, carrierSignal);
@@ -33,7 +31,7 @@ namespace Digital
             SoundGenerator soundGenerator = new SoundGenerator(SampleRate, Seconds);
             soundGenerator.FileName = "polygarmonic";
 
-            soundGenerator.Generate(values, false);
+            soundGenerator.Generate(values, true);
 
             //var signal = new PolygarmonicSignal(signal1, signal2);
 

@@ -26,7 +26,7 @@ namespace Digital
 
 
             //var values = Modulation.Amplitude(signal1, signal2, SampleRate, Seconds);
-            var values = Modulation.Frequency(signal1, signal2, SampleRate, Seconds);
+            var values = Modulation.ApplyFM(signal1, signal2, SampleRate, Seconds);
 
             SoundGenerator soundGenerator = new SoundGenerator(SampleRate, Seconds);
             soundGenerator.FileName = "polygarmonic";

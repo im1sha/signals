@@ -5,17 +5,20 @@ namespace Signals
 {
     public static class Modulation
     {
-        public static double[] Amplitude(
+        public static double[] ApplyAM(
             Signal modulationSignal,
             Signal carrierSignal, 
             int sampleRate,
             int seconds)
         {
             double[] result = new double[sampleRate * seconds];
+            double time, modulationAmplitude;
+
             for (int n = 0; n < seconds * sampleRate; n++)
             {
-                var time = (double)n / sampleRate;
-                var modulationAmplitude = 
+                time = (double)n / sampleRate;
+
+                modulationAmplitude = 
                     modulationSignal.GetNormalizedSignalValue(time);
 
                 result[n] = (modulationAmplitude /*+ carrierSignal.Amplitude*/) 
@@ -25,24 +28,26 @@ namespace Signals
             return result;
         }
 
-        public static double[] Frequency(
+        public static double[] ApplyFM(
             Signal modulationSignal,
             Signal carrierSignal,
             int sampleRate, 
             int seconds)
         {
             double[] result = new double[sampleRate * seconds];
-            double fi = 0;
+            double phi = 0;
+            double val;
+            double multiplier = 
+                2 * Math.PI * carrierSignal.Frequency // GetHarmonicSignalArgument with no start_phase divided by sampleRate
+                / sampleRate;
 
             for (int n = 0; n < seconds * sampleRate; n++)
             {
-                var time = (double)n / sampleRate;
-                var lfo = modulationSignal.GetVolume(time);
+                val = modulationSignal.GetVolume((double)n / sampleRate);
 
-                fi += 2 * Math.PI * carrierSignal.Frequency 
-                    * (1 + lfo) / sampleRate;
+                phi += multiplier * (1 + val);
 
-                result[n] = carrierSignal.ApplyFunction(fi);
+                result[n] = carrierSignal.ApplyFunction(phi);
             }
 
             return result;

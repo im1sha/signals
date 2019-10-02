@@ -19,6 +19,7 @@ namespace Signals.Signals
             StartPhase = data.StartPhase;
         }
 
+        /// <param name="time">Should be in bounds [0, 1]</param>
         public double GetVolume(double time)
         {
             return Amplitude * GetNormalizedSignalValue(time);
@@ -30,10 +31,13 @@ namespace Signals.Signals
         }
 
         /// <returns>
+        /// cases
         /// NoiseSignal, 
         /// SinusSignal,
-        /// TriangleSignal: [-1, 1]
+        /// TriangleSignal,
+        /// SawtoothSignal: [-1, 1]
         /// 
+        /// case
         /// ImpulseSignal: [0, 1]
         /// </returns>
         protected internal abstract double ApplyFunction(double phi);

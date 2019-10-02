@@ -139,13 +139,13 @@ namespace UI
             if (IsAmplitude)
             {
 #pragma warning disable CS0162 // Unreachable code detected
-                return Modulation.Amplitude(modulatorSignal, 
+                return Modulation.ApplyAM(modulatorSignal, 
                     carrierSignal, SampleRate, Seconds);
 #pragma warning restore CS0162 // Unreachable code detected                 
             }
             else
             {
-                return Modulation.Frequency(modulatorSignal,
+                return Modulation.ApplyFM(modulatorSignal,
                     carrierSignal, SampleRate, Seconds);
             }
         }

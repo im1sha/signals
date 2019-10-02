@@ -1,45 +1,32 @@
-﻿using System;
-using Signals.Signals;
+﻿using Signals.Signals;
+using System.Linq;
 
 namespace Signals
 {
     public class PolygarmonicSignal : ISignal
     {
-        private readonly Signal[] signals;
-        private double AmplitudeSum { get; }
-
+        private readonly Signal[] _signals;
+        private readonly double _amplitudesSum;
 
         public PolygarmonicSignal(params Signal[] signals)
         {
-            this.signals = signals;
-            AmplitudeSum = GetAmplitude();
+            _signals = signals;
+            _amplitudesSum = GetAmplitudesSum(signals);
         }
 
         public double GetVolume(double time)
         {
-            double value = 0;
-            foreach (var signal in signals)
-            {
-                value += signal.GetVolume(time);
-            }
-
-            return value;
+            return _signals.Sum(s => s.GetVolume(time));
         }
 
         public double GetNormalizedSignalValue(double time)
         {
-            return GetVolume(time) / AmplitudeSum;
+            return GetVolume(time) / _amplitudesSum;
         }
 
-        private double GetAmplitude()
+        private double GetAmplitudesSum(Signal[] signals)
         {
-            double resultAmplitude = 0;
-            foreach (var signal in signals)
-            {
-                resultAmplitude += signal.Amplitude;
-            }
-
-            return resultAmplitude;
+            return signals.Sum(s => s.Amplitude);
         }
     }
 }

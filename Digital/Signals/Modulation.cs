@@ -18,20 +18,22 @@ namespace Signals
             {
                 time = (double)n / sampleRate;
 
-                // formula:
-                // s(t)=[Ac+Am*cos(2*π*fm*t)]cos(2*π*fc*t)
-                //
-                // =>
-                //
+                #region formula with amplitudes 
                 // result[n] = (modulationSignal.GetVolume(time) + carrierSignal.Amplitude)
                 //    * carrierSignal.GetNormalizedSignalValue(time);
-                //
-                result[n] = (modulationSignal.GetNormalizedSignalValue(time) /* + carrierSignal.Amplitude*/) 
+                #endregion
+                #region universal formula
+                // example: https://www.desmos.com/calculator/40yzkqufin
+                // fm(t) = m(t) * c(t)
+                #endregion
+
+                result[n] = modulationSignal.GetNormalizedSignalValue(time) 
                     * carrierSignal.GetNormalizedSignalValue(time);
             }
 
             return result;
         }
+
 
         public static double[] ApplyFM(
             Signal modulationSignal,

@@ -13,6 +13,7 @@ namespace Signals.Signals
 
         protected internal override double ApplyFunction(double phi)
         {
+            // 
             return Math.Sin(phi) + 1 >= 2 * (1 - DutyFactor)
                 ? 1
                 : 0;

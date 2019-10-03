@@ -1,36 +1,32 @@
 ﻿using Signals;
 using Signals.Signals;
 using Sound;
+using System;
 
 namespace Digital
 {
     class Program
     {
-        private const int SAMPLE_RATE = 44100;
-        private const int SECONDS = 10;
+        private const int SampleRate = 44100;
+        private const int Seconds = 10;
 
         static void Main(string[] args)
         {
-            //Data data1 = new Data(2, 1, 0, 0.25);
-            //Data data2 = new Data(1, 800, 0, 0.5);
-
-            Data data1 = new Data(1, 2, 0.5, 0.5);
-            Data data2 = new Data(1, 600, 0.5, 0.5);
+            Data data1 = new Data(1, 2, 0, 0);
+            Data data2 = new Data(1, 50, 0, 0.9);
 
             Signal signal1 = new SinusSignal(data1);
             Signal signal2 = new ImpulseSignal(data2);
 
 
-            //var values = Modulation.ApplyAM(signal1, signal2, SAMPLE_RATE, SECONDS);
-            var values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, SECONDS);
+            var values = Modulation.ApplyFM(signal1, signal2, SampleRate, Seconds);
 
-            SoundGenerator soundGenerator = new SoundGenerator(SAMPLE_RATE, SECONDS, "polygarmonic");
+            SoundGenerator soundGenerator = new SoundGenerator(SampleRate, Seconds, 
+                $"MS {signal1.GetType()} A {data1.Amplitude} F {data1.Frequency} phi0 {data1.StartPhase} D {data1.DutyFactor}. " +
+                $"CS {signal2.GetType()} A {data2.Amplitude} F {data2.Frequency} phi0 {data2.StartPhase} D {data2.DutyFactor}" 
+            );
 
             soundGenerator.Generate(values, true);
-
-            //var signal = new PolygarmonicSignal(signal1, signal2);
-
-            //soundGenerator.Generate(signal, false);
         }
     }
 }

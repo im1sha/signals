@@ -24,8 +24,8 @@ namespace UI
             ConfigureAxis(chart1.ChartAreas[0].AxisY);
 
 
-            DATA_1 = new Data(2, 1, 0, 0.1);
-            DATA_2 = new Data(1, 10, 0, 0.25);
+            DATA_1 = new Data(5, 2, 0, 0.5);
+            DATA_2 = new Data(1, 2, 0, 0.5);
         }
 
         private void ConfigureAxis(Axis axis)
@@ -117,6 +117,18 @@ namespace UI
                         new TriangleSignal(DATA_1),
                         new ImpulseSignal(DATA_2));
                     break;
+                #region test section 
+                case 5:
+                    values = GetModulationSignal(
+                          new SinusSignal(new Data(1, 2, 0, 0)),
+                          new ImpulseSignal(new Data(1, 2, 0, 0.25)));
+                    break;
+                case 6:
+                    values = GetModulationSignal(
+                          new SinusSignal(new Data(1, 2, 0, 0)),
+                          new ImpulseSignal(new Data(1, 2, 0, 0.5)));
+                    break;
+                #endregion
                 default:
                     values = new double[1];
                     break;
@@ -137,10 +149,26 @@ namespace UI
             }
             else
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 return Modulation.ApplyFM(modulatorSignal,
                     carrierSignal, SAMPLE_RATE, SECONDS);
+#pragma warning restore CS0162 // Unreachable code detected
             }
         }
+
+        #region test buttons
+
+        private void buttonTest1_Click_1(object sender, EventArgs e)
+        {
+            ChooseModulationSignal(5);
+        }
+
+        private void buttonTest2_Click_1(object sender, EventArgs e)
+        {
+            ChooseModulationSignal(6);
+        }
+
+        #endregion
 
         #region Buttons
 
@@ -196,5 +224,7 @@ namespace UI
         }
 
         #endregion
+
+        
     }
 }

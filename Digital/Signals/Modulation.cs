@@ -12,16 +12,21 @@ namespace Signals
             int seconds)
         {
             double[] result = new double[sampleRate * seconds];
-            double time, modulationAmplitude;
+            double time;
 
             for (int n = 0; n < seconds * sampleRate; n++)
             {
                 time = (double)n / sampleRate;
 
-                modulationAmplitude = 
-                    modulationSignal.GetNormalizedSignalValue(time);
-
-                result[n] = (modulationAmplitude /*+ carrierSignal.Amplitude*/) 
+                // formula:
+                // s(t)=[Ac+Am*cos(2*π*fm*t)]cos(2*π*fc*t)
+                //
+                // =>
+                //
+                // result[n] = (modulationSignal.GetVolume(time) + carrierSignal.Amplitude)
+                //    * carrierSignal.GetNormalizedSignalValue(time);
+                //
+                result[n] = (modulationSignal.GetNormalizedSignalValue(time) /* + carrierSignal.Amplitude*/) 
                     * carrierSignal.GetNormalizedSignalValue(time);
             }
 

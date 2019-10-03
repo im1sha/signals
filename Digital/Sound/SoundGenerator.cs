@@ -1,78 +1,71 @@
-﻿using System;
+﻿using NAudio.Wave;
+using Signals;
+using System;
 using System.IO;
 using System.Threading;
-using NAudio.Wave;
-using Signals;
-using Signals.Signals;
 
 namespace Sound
 {
     public class SoundGenerator
     {
-        private const int BytesPerSound = 2;
-        private const int MaxValue = Int16.MaxValue;
-        private const int Bits = BytesPerSound * 8 ;
-        private const int Channels = 1;
+        private const int MAX_VALUE = short.MaxValue;
+        private const int BYTES_PER_SOUND = 2;
+        private const int BITS_PER_SOUND = BYTES_PER_SOUND * 8;
+        private const int CHANNELS = 1;
 
-        private const string Extension = "wav";
+        private const string EXTENSION = "wav";
 
-        public string FileName { get; set; } = "example";
+        public string FileName { get; }
 
-        public int SampleRate { get; set; }
+        public int SampleRate { get; }
 
-        public int Seconds { get; set; }
+        public int Seconds { get; }
 
-        public SoundGenerator(int sampleRate, int seconds)
+        public SoundGenerator(int sampleRate, int seconds, string fileName = "example")
         {
             SampleRate = sampleRate;
             Seconds = seconds;
+            FileName = fileName;
         }
 
         public void Generate(ISignal signal, bool saveToFile = false)
         {
-            var raw = new byte[SampleRate * Seconds * BytesPerSound];
+            var raw = new byte[SampleRate * Seconds * BYTES_PER_SOUND];
 
             for (int n = 0; n < SampleRate * Seconds; n++)
             {
-                var x = (double) n / SampleRate;
+                var x = (double)n / SampleRate;
                 var sampleValue = signal.GetNormalizedSignalValue(x);
-                var sample = (short) (sampleValue * MaxValue);
+                var sample = (short)(sampleValue * MAX_VALUE);
                 var bytes = BitConverter.GetBytes(sample);
 
                 raw[n * 2] = bytes[0];
                 raw[n * 2 + 1] = bytes[1];
             }
 
-            var ms = new MemoryStream(raw);
-            var rs =
-                new RawSourceWaveStream(ms, new WaveFormat(SampleRate, Bits, Channels));
-
-            if (saveToFile)
-            {
-                SaveToFile(rs);
-            }
-            else
-            {
-                PlayMusic(rs);
-            }
+            Generate(raw, saveToFile);
         }
 
         public void Generate(double[] values, bool saveToFile = false)
         {
-            var raw = new byte[SampleRate * Seconds * BytesPerSound];
+            var raw = new byte[SampleRate * Seconds * BYTES_PER_SOUND];
 
             for (int n = 0; n < values.Length; n++)
             {
-                var sample = (short)(values[n] * MaxValue);
+                var sample = (short)(values[n] * MAX_VALUE);
                 var bytes = BitConverter.GetBytes(sample);
 
                 raw[n * 2] = bytes[0];
                 raw[n * 2 + 1] = bytes[1];
             }
 
-            var ms = new MemoryStream(raw);
-            var rs =
-                new RawSourceWaveStream(ms, new WaveFormat(SampleRate, Bits, Channels));
+            Generate(raw, saveToFile);
+        }
+
+        private void Generate(byte[] rawBytes, bool saveToFile)
+        {
+            var ms = new MemoryStream(rawBytes);
+            var rs = new RawSourceWaveStream(ms, new WaveFormat(SampleRate, BITS_PER_SOUND, CHANNELS));
 
             if (saveToFile)
             {
@@ -85,9 +78,9 @@ namespace Sound
         }
 
         private void SaveToFile(RawSourceWaveStream rs)
-        {
+        {          
             WaveFileWriter.CreateWaveFile(
-                $"{Directory.GetCurrentDirectory()}\\{FileName}.{Extension}", rs);
+                $"{Directory.GetCurrentDirectory()}\\{FileName}.{EXTENSION}", rs);
         }
 
         private void PlayMusic(RawSourceWaveStream rs)

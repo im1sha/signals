@@ -6,9 +6,8 @@ namespace Digital
 {
     class Program
     {
-        private const int SampleRate = 44100;
-        private const int Seconds = 10;
-        private const double SoundAmplitude = 1;
+        private const int SAMPLE_RATE = 44100;
+        private const int SECONDS = 10;
 
         static void Main(string[] args)
         {
@@ -21,23 +20,17 @@ namespace Digital
             Signal signal1 = new SinusSignal(data1);
             Signal signal2 = new ImpulseSignal(data2);
 
-            //ISignal amplitudeModulation = new AmplitudeModulationSignal(modulatorSignal, carrierSignal);
 
+            //var values = Modulation.ApplyAM(signal1, signal2, SAMPLE_RATE, SECONDS);
+            var values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, SECONDS);
 
-
-            //var values = Modulation.Amplitude(signal1, signal2, SampleRate, Seconds);
-            var values = Modulation.ApplyFM(signal1, signal2, SampleRate, Seconds);
-
-            SoundGenerator soundGenerator = new SoundGenerator(SampleRate, Seconds);
-            soundGenerator.FileName = "polygarmonic";
+            SoundGenerator soundGenerator = new SoundGenerator(SAMPLE_RATE, SECONDS, "polygarmonic");
 
             soundGenerator.Generate(values, true);
 
             //var signal = new PolygarmonicSignal(signal1, signal2);
 
             //soundGenerator.Generate(signal, false);
-
-
         }
     }
 }

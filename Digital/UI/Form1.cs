@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Signals;
+using Signals.Signals;
+using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Signals;
-//using Signals.Modulation;
-using Signals.Signals;
 
 namespace UI
 {
     public partial class Form1 : Form
     {
-        private const int SampleRate = 1000;
-        private const int Seconds = 2;
-        private const bool IsAmplitude = false;
+        private const int SAMPLE_RATE = 1000;
+        private const int SECONDS = 2;
+        private const bool IS_AM = false;
 
-        private readonly Data data1;
-        private readonly Data data2;
+        private readonly Data DATA_1;
+        private readonly Data DATA_2;
 
-        private ISignal signal;
+        private ISignal _signal;
 
         public Form1()
         {
@@ -32,8 +24,8 @@ namespace UI
             ConfigureAxis(chart1.ChartAreas[0].AxisY);
 
 
-            data1 = new Data(2, 2, 0, 0.5);
-            data2 = new Data(1, 10, 0, 0.5);
+            DATA_1 = new Data(2, 1, 0, 0.1);
+            DATA_2 = new Data(1, 10, 0, 0.25);
         }
 
         private void ConfigureAxis(Axis axis)
@@ -50,10 +42,10 @@ namespace UI
             chart1.Series[0].Points.Clear();
             double x, func;
 
-            for (int n = 0; n < SampleRate * Seconds; n++)
+            for (int n = 0; n < SAMPLE_RATE * SECONDS; n++)
             {
-                x = (double)n / SampleRate;
-                func = signal.GetVolume(x);
+                x = (double)n / SAMPLE_RATE;
+                func = _signal.GetVolume(x);
 
                 chart1.Series[0].Points.AddXY(x, func);
             }
@@ -63,9 +55,9 @@ namespace UI
         {
             chart1.Series[0].Points.Clear();
 
-            for (int n = 0; n < SampleRate * Seconds; n++)
+            for (int n = 0; n < SAMPLE_RATE * SECONDS; n++)
             {
-                var x = (double) n / SampleRate;
+                var x = (double)n / SAMPLE_RATE;
 
                 chart1.Series[0].Points.AddXY(x, values[n]);
             }
@@ -77,24 +69,24 @@ namespace UI
             switch (x)
             {
                 case 0:
-                    signal = new SinusSignal(data1);
+                    _signal = new SinusSignal(DATA_1);
                     break;
                 case 1:
-                    signal = new ImpulseSignal(data1);
+                    _signal = new ImpulseSignal(DATA_1);
                     break;
                 case 2:
-                    signal = new TriangleSignal(data1);
+                    _signal = new TriangleSignal(DATA_1);
                     break;
                 case 3:
-                    signal = new SawtoothSignal(data1);
+                    _signal = new SawtoothSignal(DATA_1);
                     break;
                 case 4:
-                    signal = new NoiseSignal(data1);
+                    _signal = new NoiseSignal(DATA_1);
                     break;
-                case 5: 
-                    signal = new PolygarmonicSignal(
-                        new SinusSignal(data1), 
-                        new SinusSignal(data2));
+                case 5:
+                    _signal = new PolygarmonicSignal(
+                        new SinusSignal(DATA_1),
+                        new SinusSignal(DATA_2));
                     break;
             }
             CreateChartFunction();
@@ -107,23 +99,23 @@ namespace UI
             {
                 case 1:
                     values = GetModulationSignal(
-                        new SinusSignal(data1), 
-                        new SinusSignal(data2));
+                        new SinusSignal(DATA_1),
+                        new SinusSignal(DATA_2));
                     break;
                 case 2:
                     values = GetModulationSignal(
-                        new TriangleSignal(data1), 
-                        new SinusSignal(data2));
+                        new TriangleSignal(DATA_1),
+                        new SinusSignal(DATA_2));
                     break;
                 case 3:
                     values = GetModulationSignal(
-                        new SinusSignal(data1), 
-                        new ImpulseSignal(data2));
+                        new SinusSignal(DATA_1),
+                        new ImpulseSignal(DATA_2));
                     break;
                 case 4:
                     values = GetModulationSignal(
-                        new TriangleSignal(data1), 
-                        new ImpulseSignal(data2));
+                        new TriangleSignal(DATA_1),
+                        new ImpulseSignal(DATA_2));
                     break;
                 default:
                     values = new double[1];
@@ -136,17 +128,17 @@ namespace UI
         public double[] GetModulationSignal(Signal modulatorSignal,
             Signal carrierSignal)
         {
-            if (IsAmplitude)
+            if (IS_AM)
             {
 #pragma warning disable CS0162 // Unreachable code detected
-                return Modulation.ApplyAM(modulatorSignal, 
-                    carrierSignal, SampleRate, Seconds);
+                return Modulation.ApplyAM(modulatorSignal,
+                    carrierSignal, SAMPLE_RATE, SECONDS);
 #pragma warning restore CS0162 // Unreachable code detected                 
             }
             else
             {
                 return Modulation.ApplyFM(modulatorSignal,
-                    carrierSignal, SampleRate, Seconds);
+                    carrierSignal, SAMPLE_RATE, SECONDS);
             }
         }
 

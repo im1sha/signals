@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digital", "Digital\Digital.csproj", "{6CD1B25A-B0A0-454C-A5BA-9710009AF552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{6CD1B25A-B0A0-454C-A5BA-9710009AF552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Signals", "Signals\Signals.csproj", "{AA519554-EEB7-4D6E-9CFA-D14A32089751}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sound", "Sound\Sound.csproj", "{9BD1114E-0432-4F54-8CFC-E76CBD108498}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{BA12D67C-E865-491A-A434-E9A46AE2EE58}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Charts", "Charts\Charts.csproj", "{BA12D67C-E865-491A-A434-E9A46AE2EE58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundUI", "SoundUI\SoundUI.csproj", "{77A3801A-7AB5-4A21-882F-E7A19AD3A8F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BA12D67C-E865-491A-A434-E9A46AE2EE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA12D67C-E865-491A-A434-E9A46AE2EE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA12D67C-E865-491A-A434-E9A46AE2EE58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77A3801A-7AB5-4A21-882F-E7A19AD3A8F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77A3801A-7AB5-4A21-882F-E7A19AD3A8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77A3801A-7AB5-4A21-882F-E7A19AD3A8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77A3801A-7AB5-4A21-882F-E7A19AD3A8F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

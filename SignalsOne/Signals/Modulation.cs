@@ -8,7 +8,7 @@ namespace Signals
         // 
         public static double[] ApplyAM(
             Signal modulationSignal,
-            Signal carrierSignal, 
+            Signal carrierSignal,
             int sampleRate,
             int seconds)
         {
@@ -36,21 +36,27 @@ namespace Signals
         public static double[] ApplyFM(
             Signal modulationSignal,
             Signal carrierSignal,
-            int sampleRate, 
+            int sampleRate,
             int seconds)
         {
             double[] result = new double[sampleRate * seconds];
             double phi = 0;
-            double val;
-            double multiplier = 
-                2 * Math.PI * carrierSignal.Frequency // GetHarmonicSignalArgument with no start_phase divided by sampleRate
+            double modulationPart;
+            double carrierPart =
+                2 * Math.PI * carrierSignal.Frequency // no start phase
                 / sampleRate;
+            double modulationIndex = carrierPart;
+
+            #region alternative
+            // if deviation is 50% of carrierSignal frequency
+            // modulationIndex = carrierSignal.Amplitude / (2 * modulationSignal.Amplitude); 
+            #endregion
 
             for (int n = 0; n < seconds * sampleRate; n++)
             {
-                val = modulationSignal.GetVolume((double)n / sampleRate);
+                modulationPart = modulationSignal.GetVolume((double)n / sampleRate);
 
-                phi += multiplier * (1 + val);
+                phi += carrierPart + (modulationIndex * modulationPart);
 
                 result[n] = carrierSignal.ApplyFunction(phi);
             }

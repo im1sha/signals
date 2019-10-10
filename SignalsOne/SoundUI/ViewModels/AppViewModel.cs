@@ -205,7 +205,7 @@ namespace SoundUI.ViewModels
                 }
                 catch 
                 {
-                    MessageBox.Show("Select combobox values");
+                    MessageBox.Show("Enter correct values");
                 }
             }));
 

@@ -7,28 +7,28 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Command="{Binding RunCommand}" Content="Run" HorizontalAlignment="Left" Margin="272,184,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding RunCommand}" Content="Run" HorizontalAlignment="Left" Margin="600,111,0,0" VerticalAlignment="Top" Width="75"/>
 
         <ComboBox 
             ItemsSource="{Binding Signals}"        
             SelectedItem="{Binding SelectedSignal1}"
             Text="Select signal 1"
             IsEditable="true"
-            IsReadOnly="true" Margin="436,15,249.6,371"/>
-        
+            IsReadOnly="true" Margin="58,137,627.6,249"/>
+
         <ComboBox 
             ItemsSource="{Binding Signals}"        
             SelectedItem="{Binding SelectedSignal2}"
             Text="Select signal 2"
             IsEditable="true"
-            IsReadOnly="true" Margin="556,15,129.6,371"/>
+            IsReadOnly="true" Margin="254,137,431.6,249"/>
 
         <ComboBox 
             ItemsSource="{Binding Actions}"        
             SelectedItem="{Binding SelectedAction}"
             Text="Select action"
             IsEditable="true"
-            IsReadOnly="true" Margin="436,63,249.6,323"/>
+            IsReadOnly="true" Margin="447,110,238.6,276"/>
 
         <TextBox Text="{Binding Amplitude1}" HorizontalAlignment="Left" Height="23" Margin="58,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox Text="{Binding Frequency1}" HorizontalAlignment="Left" Height="23" Margin="58,53,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
@@ -48,8 +48,8 @@
         <Label Content="D2" HorizontalAlignment="Left" Margin="208,106,0,0" VerticalAlignment="Top"/>
 
 
-        <TextBox Text="{Binding Seconds}" HorizontalAlignment="Left" Height="23" Margin="122,183,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <Label Content="Seconds" HorizontalAlignment="Left" Margin="49,180,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Seconds}" HorizontalAlignment="Left" Height="23" Margin="520,64,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <Label Content="Seconds" HorizontalAlignment="Left" Margin="447,60,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

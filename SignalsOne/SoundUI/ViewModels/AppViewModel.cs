@@ -60,7 +60,7 @@ namespace SoundUI.ViewModels
             }
         }
 
-        private double _frequency1 = 1;
+        private double _frequency1 = 2;
         public string Frequency1
         {
             get => _frequency1.ToString(APP_LOCALIZATION);
@@ -75,7 +75,7 @@ namespace SoundUI.ViewModels
             }
         }
 
-        private double _frequency2 = 2;
+        private double _frequency2 = 600;
         public string Frequency2
         {
             get => _frequency2.ToString(APP_LOCALIZATION);
@@ -120,7 +120,7 @@ namespace SoundUI.ViewModels
             }
         }
 
-        private double _dutyFactor1 = 0;
+        private double _dutyFactor1 = 0.5;
         public string DutyFactor1
         {
             get => _dutyFactor1.ToString(APP_LOCALIZATION);
@@ -135,7 +135,7 @@ namespace SoundUI.ViewModels
             }
         }
 
-        private double _dutyFactor2 = 0;
+        private double _dutyFactor2 = 0.5;
         public string DutyFactor2
         {
             get => _dutyFactor2.ToString(APP_LOCALIZATION);
@@ -149,11 +149,25 @@ namespace SoundUI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private int _seconds = 2;
+        public string Seconds
+        {
+            get => _seconds.ToString(APP_LOCALIZATION);
+            set
+            {
+                if (!int.TryParse(value, out _) || Convert.ToInt32(value, APP_LOCALIZATION) <= 0)
+                {
+                    return;
+                }
+                _seconds = Convert.ToInt32(value, APP_LOCALIZATION);
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region consts
         private const int SAMPLE_RATE = 44100;
-        private const int SECONDS = 3;
         #endregion     
 
         #region commands
@@ -174,25 +188,24 @@ namespace SoundUI.ViewModels
                     switch (_selectedAction)
                     {
                         case "Single":
-                            values = GetSignalValues(signal1);
+                            values = GetSignalValues(signal1, SAMPLE_RATE, _seconds);
                             break;
                         case "Poly":                            
-                            values = GetSignalValues(new PolygarmonicSignal(signal1, signal2));                         
+                            values = GetSignalValues(new PolygarmonicSignal(signal1, signal2), SAMPLE_RATE, _seconds);                         
                             break;
                         case "FM":
-                            values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, SECONDS);
+                            values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, _seconds);
                             break;
                         case "AM":
-                            values = Modulation.ApplyAM(signal1, signal2, SAMPLE_RATE, SECONDS);
+                            values = Modulation.ApplyAM(signal1, signal2, SAMPLE_RATE, _seconds);
                             break;
                     }
                
-                    new SoundGenerator(SAMPLE_RATE, SECONDS).Generate(values, false);
+                    new SoundGenerator(SAMPLE_RATE, _seconds).Generate(values, false);
                 }
                 catch 
                 {
-                    // it will never appears
-                    MessageBox.Show("Error");
+                    MessageBox.Show("Select combobox values");
                 }
             }));
 
@@ -215,7 +228,7 @@ namespace SoundUI.ViewModels
             }
         }
 
-        private double[] GetSignalValues(ISignal signal, int sampleRate = SAMPLE_RATE, int seconds = SECONDS) 
+        private double[] GetSignalValues(ISignal signal, int sampleRate, int seconds) 
         {
             double[] result = new double[sampleRate * seconds];
             double time;
@@ -242,7 +255,7 @@ namespace SoundUI.ViewModels
             "Triangle"
         };
 
-        private string _selectedSignal1 = null;
+        private string _selectedSignal1 = "Sinus";
         public string SelectedSignal1
         {
             get => _selectedSignal1;
@@ -254,7 +267,7 @@ namespace SoundUI.ViewModels
         }
 
 
-        private string _selectedSignal2 = null;
+        private string _selectedSignal2 = "Impulse";
         public string SelectedSignal2
         {
             get => _selectedSignal2;
@@ -272,7 +285,7 @@ namespace SoundUI.ViewModels
             "AM",
         };
 
-        private string _selectedAction = null;
+        private string _selectedAction = "FM";
         public string SelectedAction
         {
             get => _selectedAction;

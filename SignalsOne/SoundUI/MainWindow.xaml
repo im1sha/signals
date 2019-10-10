@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Command="{Binding RunCommand}" Content="Run" HorizontalAlignment="Left" Margin="589,91,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding RunCommand}" Content="Run" HorizontalAlignment="Left" Margin="272,184,0,0" VerticalAlignment="Top" Width="75"/>
 
         <ComboBox 
             ItemsSource="{Binding Signals}"        
@@ -46,6 +46,10 @@
         <Label Content="f2" HorizontalAlignment="Left" Margin="208,50,0,0" VerticalAlignment="Top"/>
         <Label Content="phi2" HorizontalAlignment="Left" Margin="208,78,0,0" VerticalAlignment="Top"/>
         <Label Content="D2" HorizontalAlignment="Left" Margin="208,106,0,0" VerticalAlignment="Top"/>
+
+
+        <TextBox Text="{Binding Seconds}" HorizontalAlignment="Left" Height="23" Margin="122,183,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <Label Content="Seconds" HorizontalAlignment="Left" Margin="49,180,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

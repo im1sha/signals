@@ -2,18 +2,15 @@
 using Signals.Signals;
 using Sound;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace SoundUI.ViewModels
 {
-    class AppViewModel : INotifyPropertyChanged
+    internal class AppViewModel : INotifyPropertyChanged
     {
         #region INotifyPropertyChanged 
 
@@ -165,21 +162,72 @@ namespace SoundUI.ViewModels
         public InteractCommand RunCommand => _runCommand ??
             (_runCommand = new InteractCommand((o) =>
             {
-                Data data1 = new Data(_amplitude1, _frequency1, _initialPhase1, _dutyFactor1);
-                Data data2 = new Data(_amplitude2, _frequency2, _initialPhase2, _dutyFactor2);
+                try
+                {               
+                    Data data1 = new Data(_amplitude1, _frequency1, _initialPhase1, _dutyFactor1);
+                    Data data2 = new Data(_amplitude2, _frequency2, _initialPhase2, _dutyFactor2);
 
-                Signal signal1 = new SinusSignal(data1);
-                Signal signal2 = new ImpulseSignal(data2);
+                    Signal signal1 = GetSignalByName(_selectedSignal1, data1);
+                    Signal signal2 = GetSignalByName(_selectedSignal2, data2);
 
-                var values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, SECONDS);
-                SoundGenerator soundGenerator = new SoundGenerator(SAMPLE_RATE, SECONDS,
-                    $"MS {signal1.GetType()} A {data1.Amplitude} F {data1.Frequency} phi0 {data1.StartPhase} D {data1.DutyFactor}. " +
-                    $"CS {signal2.GetType()} A {data2.Amplitude} F {data2.Frequency} phi0 {data2.StartPhase} D {data2.DutyFactor}"
-                );
-
-                soundGenerator.Generate(values, false);
-
+                    double[] values = new double[2];
+                    switch (_selectedAction)
+                    {
+                        case "Single":
+                            values = GetSignalValues(signal1);
+                            break;
+                        case "Poly":                            
+                            values = GetSignalValues(new PolygarmonicSignal(signal1, signal2));                         
+                            break;
+                        case "FM":
+                            values = Modulation.ApplyFM(signal1, signal2, SAMPLE_RATE, SECONDS);
+                            break;
+                        case "AM":
+                            values = Modulation.ApplyAM(signal1, signal2, SAMPLE_RATE, SECONDS);
+                            break;
+                    }
+               
+                    new SoundGenerator(SAMPLE_RATE, SECONDS).Generate(values, false);
+                }
+                catch 
+                {
+                    // it will never appears
+                    MessageBox.Show("Error");
+                }
             }));
+
+        private Signal GetSignalByName(string s, Data data)
+        {
+            switch (s)
+            {
+                case "Impulse": 
+                    return new ImpulseSignal(data);
+                case "Sinus": 
+                    return new SinusSignal(data);
+                case "Noise":
+                    return new NoiseSignal(data);
+                case "Sawtooth": 
+                    return new SawtoothSignal(data);
+                case "Triangle":
+                    return new TriangleSignal(data);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private double[] GetSignalValues(ISignal signal, int sampleRate = SAMPLE_RATE, int seconds = SECONDS) 
+        {
+            double[] result = new double[sampleRate * seconds];
+            double time;
+
+            for (int n = 0; n < seconds * sampleRate; n++)
+            {
+                time = (double)n / sampleRate;
+                result[n] = signal.GetNormalizedSignalValue(time);
+            }
+
+            return result;
+        }
 
         #endregion
 
@@ -197,19 +245,19 @@ namespace SoundUI.ViewModels
         private string _selectedSignal1 = null;
         public string SelectedSignal1
         {
-            get { return _selectedSignal1; }
+            get => _selectedSignal1;
             set
             {
                 _selectedSignal1 = value;
                 OnPropertyChanged();
             }
         }
-       
+
 
         private string _selectedSignal2 = null;
         public string SelectedSignal2
         {
-            get { return _selectedSignal2; }
+            get => _selectedSignal2;
             set
             {
                 _selectedSignal2 = value;
@@ -224,10 +272,10 @@ namespace SoundUI.ViewModels
             "AM",
         };
 
-        private string _selectedAction = null;     
+        private string _selectedAction = null;
         public string SelectedAction
         {
-            get { return _selectedAction; }
+            get => _selectedAction;
             set
             {
                 _selectedAction = value;

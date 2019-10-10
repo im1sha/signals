@@ -96,5 +96,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Signals\Signals.csproj">
+      <Project>{AA519554-EEB7-4D6E-9CFA-D14A32089751}</Project>
+      <Name>Signals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sound\Sound.csproj">
+      <Project>{9BD1114E-0432-4F54-8CFC-E76CBD108498}</Project>
+      <Name>Sound</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,7 +7,45 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="28,27,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding RunCommand}" Content="Run" HorizontalAlignment="Left" Margin="589,91,0,0" VerticalAlignment="Top" Width="75"/>
+
+        <ComboBox 
+            ItemsSource="{Binding Signals}"        
+            SelectedItem="{Binding SelectedSignal1}"
+            Text="Select signal 1"
+            IsEditable="true"
+            IsReadOnly="true" Margin="436,15,249.6,371"/>
+        
+        <ComboBox 
+            ItemsSource="{Binding Signals}"        
+            SelectedItem="{Binding SelectedSignal2}"
+            Text="Select signal 2"
+            IsEditable="true"
+            IsReadOnly="true" Margin="556,15,129.6,371"/>
+
+        <ComboBox 
+            ItemsSource="{Binding Actions}"        
+            SelectedItem="{Binding SelectedAction}"
+            Text="Select action"
+            IsEditable="true"
+            IsReadOnly="true" Margin="436,63,249.6,323"/>
+
+        <TextBox Text="{Binding Amplitude1}" HorizontalAlignment="Left" Height="23" Margin="58,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding Frequency1}" HorizontalAlignment="Left" Height="23" Margin="58,53,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding InitialPhase1}"  HorizontalAlignment="Left" Height="23" Margin="58,81,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding DutyFactor1}" HorizontalAlignment="Left" Height="23" Margin="58,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding Amplitude2}" HorizontalAlignment="Left" Height="23" Margin="255,25,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding Frequency2}" HorizontalAlignment="Left" Height="23" Margin="255,53,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding InitialPhase2}" HorizontalAlignment="Left" Height="23" Margin="255,81,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding DutyFactor2}" HorizontalAlignment="Left" Height="23" Margin="255,109,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <Label Content="A1" HorizontalAlignment="Left" Margin="10,21,0,0" VerticalAlignment="Top"/>
+        <Label Content="f1" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top"/>
+        <Label Content="phi1" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top"/>
+        <Label Content="D1" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top"/>
+        <Label Content="A2" HorizontalAlignment="Left" Margin="208,22,0,0" VerticalAlignment="Top"/>
+        <Label Content="f2" HorizontalAlignment="Left" Margin="208,50,0,0" VerticalAlignment="Top"/>
+        <Label Content="phi2" HorizontalAlignment="Left" Margin="208,78,0,0" VerticalAlignment="Top"/>
+        <Label Content="D2" HorizontalAlignment="Left" Margin="208,106,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

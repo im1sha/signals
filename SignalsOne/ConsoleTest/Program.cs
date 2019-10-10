@@ -3,7 +3,7 @@ using Signals.Signals;
 using Sound;
 using System;
 
-namespace Digital
+namespace ConsoleTest
 {
     class Program
     {

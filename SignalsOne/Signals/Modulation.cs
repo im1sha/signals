@@ -5,6 +5,7 @@ namespace Signals
 {
     public static class Modulation
     {
+        // 
         public static double[] ApplyAM(
             Signal modulationSignal,
             Signal carrierSignal, 
@@ -18,22 +19,19 @@ namespace Signals
             {
                 time = (double)n / sampleRate;
 
-                #region formula with amplitudes 
-                // result[n] = (modulationSignal.GetVolume(time) + carrierSignal.Amplitude)
-                //    * carrierSignal.GetNormalizedSignalValue(time);
-                #endregion
-                #region universal formula
-                // example: https://www.desmos.com/calculator/40yzkqufin
-                // fm(t) = m(t) * c(t)
-                #endregion
+                result[n] = modulationSignal.GetNormalizedSignalValue(time)
+                     * carrierSignal.GetNormalizedSignalValue(time);
 
-                result[n] = modulationSignal.GetNormalizedSignalValue(time) 
-                    * carrierSignal.GetNormalizedSignalValue(time);
+                #region alternative
+                //result[n] = ((modulationSignal.GetNormalizedSignalValue(time)
+                //     * modulationSignal.Amplitude + carrierSignal.Amplitude)
+                //     * carrierSignal.GetNormalizedSignalValue(time))
+                //     / (modulationSignal.Amplitude + carrierSignal.Amplitude); // normalize to amplitude == 1   
+                #endregion
             }
 
             return result;
         }
-
 
         public static double[] ApplyFM(
             Signal modulationSignal,

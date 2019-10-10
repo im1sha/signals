@@ -4,7 +4,7 @@ using System;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace UI
+namespace Charts
 {
     public partial class Form1 : Form
     {
@@ -24,8 +24,8 @@ namespace UI
             ConfigureAxis(chart1.ChartAreas[0].AxisY);
 
 
-            DATA_1 = new Data(5, 2, 0, 0.5);
-            DATA_2 = new Data(1, 2, 0, 0.5);
+            DATA_1 = new Data(1, 1, 0, 0.5);
+            DATA_2 = new Data(2, 10, 0, 0.5);
         }
 
         private void ConfigureAxis(Axis axis)

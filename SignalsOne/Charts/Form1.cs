@@ -24,7 +24,7 @@ namespace Charts
             ConfigureAxis(chart1.ChartAreas[0].AxisY);
 
 
-            DATA_1 = new Data(1, 1, 0, 0.5);
+            DATA_1 = new Data(100, 1000, 0, 0.125);
             DATA_2 = new Data(2, 10, 0, 0.5);
         }
 

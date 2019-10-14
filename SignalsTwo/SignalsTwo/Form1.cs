@@ -1,204 +1,166 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace SignalsTwo
 {
-    //
-    // x(n) = sin(2 * Math.PI * n / N)
-    // N % 64 == 0 
-    // n = {0 .. M}
-    // M 
     public partial class Form1 : Form
     {
-        private Series signal;
-        private Series DataSer_1;
-        private Series DataSer_2;
-        private Series A_1;
-        private Series A_2;
-        private int K;
-        private double phi;
-        private readonly double[] phc = new double[15];
+        #region const 
+        private const double ROOT_OF_2_DIVIDED_BY_2
+            = 0.707; //Math.Sqrt(2) / 2;
+
+        #endregion
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        //private static double DiscreteFourierTransform(double[] signal, int j)
-        //{
-        //    double N = signal.Length;
-        //    double Acj = 2 / N, Asj = 2 / N;
-        //    double sumAcj = 0.0d, sumAsj = 0.0d;
-        //    for (int i = 0; i < N - 1; i++)
-        //    {
-        //        sumAcj += signal[i] * Math.Cos(2 * Math.PI * i * j / N);
-        //        sumAcj += signal[i] * Math.Sin(2 * Math.PI * i * j / N);
-        //    }
-
-        //    Acj *= sumAcj;
-        //    Asj *= sumAsj;
-
-        //    return Math.Sqrt(Math.Pow(Acj, 2) + Math.Pow(Asj, 2));
-        //}
-
-        private void BuildGraphWithoutPhi()
+        #region view
+        private static void ClearCharts(params Chart[] charts)
         {
-            chart3.Series.Clear();
-            chart4.Series.Clear();
-
-            chart3.Legends.Clear();
-            chart4.Legends.Clear();
-            DataSer_1 = new Series
+            foreach (var item in charts)
             {
-                Name = "СКЗ1",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.Blue,
-            };
-            DataSer_2 = new Series
-            {
-                Name = "СКЗ2",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.BlueViolet,
-            };
-            signal = new Series
-            {
-                Name = "X",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.OrangeRed
-            };
-            A_1 = new Series
-            {
-                Name = "A_1",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.Black
-            };
-            A_2 = new Series
-            {
-                Name = "A_2",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.YellowGreen
-            };
-
-            int N = int.Parse(comboBox1.Text);
-            K = N / 4;
-
-            // should be M = N - 1
-            for (int M = K; M <= 2 * N; M++)
-            {
-                double rms_1 = 0, rms_2 = 0, acj = 0, asj = 0;
-                for (int n = 0; n <= M; n++)
-                {
-                    double t = Math.Sin(2 * Math.PI * n / N);
-
-                    rms_1 += Math.Pow(t, 2);
-                    rms_2 += t;
-
-                    acj += t * Math.Sin(2 * Math.PI * n / M);
-                    asj += t * Math.Cos(2 * Math.PI * n / M);
-                }
-                acj = 2 * acj / M;
-                asj = 2 * asj / M;
-
-                signal.Points.AddXY(M, rms_2);
-                DataSer_1.Points.AddXY(M, 0.707 - Math.Sqrt(rms_1 / (M + 1)));
-                DataSer_2.Points.AddXY(M, 0.707 - (Math.Sqrt(rms_1 / (M + 1) - Math.Pow(rms_2 / (M + 1), 2))));
-                A_1.Points.AddXY(M, 1 - Math.Sqrt(acj * acj + asj * asj));
+                item.Series.Clear();
+                item.Legends.Clear();
             }
-            chart3.ResetAutoValues();
-            chart4.ResetAutoValues();
-
-            chart3.Legends.Add(signal.Legend);
-            chart4.Legends.Add(DataSer_1.Legend);
-            chart3.Series.Add(signal);
-            chart4.Series.Add(DataSer_1);
-            chart4.Series.Add(DataSer_2);
-            chart4.Series.Add(A_1);
-            //chart4.Series.Add(A_2);
         }
 
-        private void BuildGraph()
+        private static Series CreateSeries(string str, Color col)
         {
-            chart1.Series.Clear();
-            chart2.Series.Clear();
-
-            chart1.Legends.Clear();
-            chart2.Legends.Clear();
-
-            DataSer_1 = new Series
+            return new Series
             {
-                Name = "СКЗ1",
+                Name = str,
                 ChartType = SeriesChartType.Spline,
-                Color = Color.Blue
+                Color = col,
             };
-            DataSer_2 = new Series
-            {
-                Name = "СКЗ2",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.BlueViolet
-            };
-            signal = new Series
-            {
-                Name = "X",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.OrangeRed
-            };
-            A_1 = new Series
-            {
-                Name = "A_1",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.Black
-            };
-            A_2 = new Series
-            {
-                Name = "A_2",
-                ChartType = SeriesChartType.Spline,
-                Color = Color.YellowGreen
-            };
-            int N = int.Parse(comboBox1.Text);
-            K = 3 * N / 4;
-            phi = 120;
-            for (int M = K; M <= 2 * N; M++)
-            {
-                double rms_1 = 0, rms_2 = 0, acj = 0, asj = 0;
-                for (int n = 0; n <= M; n++)
-                {
-                    double t = Math.Sin(2 * Math.PI * n / N 
-                        + phi / 180 * Math.PI);
-                    rms_1 += Math.Pow(t, 2);
-                    rms_2 += t;
-
-                    acj += t * Math.Sin(2 * Math.PI * n / M);
-                    asj += t * Math.Cos(2 * Math.PI * n / M);
-                }
-
-                acj = acj * 2 / M;
-                asj = asj * 2 / M;
-
-                signal.Points.AddXY(M, rms_2);
-                DataSer_1.Points.AddXY(M, 0.707 - Math.Sqrt(rms_1 / (M + 1)));
-                DataSer_2.Points.AddXY(M, 0.707 - (Math.Sqrt(rms_1 / (M + 1) - Math.Pow(rms_2 / (M + 1), 2))));
-                A_1.Points.AddXY(M, 1 - Math.Sqrt(acj * acj + asj * asj));
-                //A_2.Points.AddXY(M, 1 - 0.707 * (Math.Sqrt(rms_1 / (M + 1) - Math.Pow(rms_2 / (M + 1), 2))));
-            }
-            chart1.ResetAutoValues();
-            chart2.ResetAutoValues();
-
-            chart2.Legends.Add(DataSer_1.Legend);
-            chart1.Legends.Add(signal.Legend);
-            chart2.Series.Add(signal);
-            chart1.Series.Add(DataSer_1);
-            chart1.Series.Add(DataSer_2);
-            chart1.Series.Add(A_1);
-            //chart1.Series.Add(A_2);
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
+        private static void Draw(params (Chart Chart,
+            string Legend,
+            IEnumerable<Series> SeriesCollection)[] charts)
         {
-            BuildGraph();
-            BuildGraphWithoutPhi();
+            foreach (var item in charts)
+            {
+                item.Chart.ResetAutoValues();
+                item.Chart.Legends.Add(item.Legend);
+                foreach (var series in item.SeriesCollection)
+                {
+                    item.Chart.Series.Add(series);
+                }
+            }
+        }
+
+        #endregion
+
+        #region model 
+        private static double GetSinusSignal(int i, int N, double phase = 0.0)
+        {
+            return Math.Sin(2 * Math.PI * i / N + phase);
+        }
+
+        private static double GetCosinusSignal(int i, int N, double phase = 0.0)
+        {
+            return Math.Cos(2 * Math.PI * i / N + phase);
+        }
+        #endregion
+
+        private void Core(Chart rootMeanSquareDeltaChart1,
+            Chart rootMeanSquareDeltaChart2,
+            Chart amplitudesDeltaChart,
+            IEnumerable<int> N,
+            IEnumerable<int> K,
+            double phi = 0)
+        {
+            if (N.Count() != K.Count() || K.Count() != 2)
+            {
+                throw new ArgumentException();
+            }
+
+            int total = N.Count();
+            double[] widthMultipliers = new[] { N.ElementAt(1) / (double)N.ElementAt(0), 1.0 };
+
+            ClearCharts(rootMeanSquareDeltaChart1, rootMeanSquareDeltaChart2, amplitudesDeltaChart);
+
+            IList<Series> amplitudesDeltaCollection = Enumerable.Range(0, total)
+                .Select(i => CreateSeries($"delta A {i+1}", i % 2 == 0 ? Color.Navy : Color.Red)).ToList();
+
+            IList<Series> rootMeanSquareDeltaCollection1 = Enumerable.Range(0, total)
+                .Select(i => CreateSeries($"delta RMS1 {i+1}", i % 2 == 0 ? Color.Navy : Color.Red)).ToList();
+
+            IList<Series> rootMeanSquareDeltaCollection2 = Enumerable.Range(0, total)
+                .Select(i => CreateSeries($"delta RMS2 {i+1}", i % 2 == 0 ? Color.Navy : Color.Red)).ToList();
+
+            for (int j = 0; j < total; j++)
+            {
+                for (int M = K.ElementAt(j); M < 2 * N.ElementAt(j); M++)
+                {
+                    double rms1 = 0;
+                    double rms2 = 0;
+                    double cosPartOfAmplitude = 0;
+                    double sinPartOfAmplitude = 0;
+
+                    for (int i = 0; i < M; i++)
+                    {
+                        double x = GetSinusSignal(i, N.ElementAt(j), phi);
+                        rms1 += Math.Pow(x, 2);
+                        rms2 += x;
+                        cosPartOfAmplitude += x * GetCosinusSignal(i, M);
+                        sinPartOfAmplitude += x * GetSinusSignal(i, M);
+                    }
+                    cosPartOfAmplitude = 2 * cosPartOfAmplitude / M;
+                    sinPartOfAmplitude = 2 * sinPartOfAmplitude / M;
+
+                    rootMeanSquareDeltaCollection1.ElementAt(j).Points.AddXY(
+                        M * widthMultipliers.ElementAt(j),
+                        ROOT_OF_2_DIVIDED_BY_2 - Math.Sqrt(
+                            rms1 / (M + 1))); ;
+
+                    rootMeanSquareDeltaCollection2.ElementAt(j).Points.AddXY(
+                        M * widthMultipliers.ElementAt(j),
+                        ROOT_OF_2_DIVIDED_BY_2 - Math.Sqrt(
+                            rms1 / (M + 1) - Math.Pow(rms2 / (M + 1), 2)));
+
+                    amplitudesDeltaCollection.ElementAt(j).Points.AddXY(
+                        M * widthMultipliers.ElementAt(j),
+                        1 - Math.Sqrt(
+                            cosPartOfAmplitude * cosPartOfAmplitude
+                            + sinPartOfAmplitude * sinPartOfAmplitude));
+                }
+            }
+            Draw(
+                (amplitudesDeltaChart,
+                amplitudesDeltaCollection.ElementAt(0).Legend,
+                amplitudesDeltaCollection)
+                ,
+                (rootMeanSquareDeltaChart2,
+                rootMeanSquareDeltaCollection2.ElementAt(0).Legend,
+                rootMeanSquareDeltaCollection2)
+                ,
+                (rootMeanSquareDeltaChart1,
+                rootMeanSquareDeltaCollection1.ElementAt(0).Legend,
+                rootMeanSquareDeltaCollection1));
+        }
+
+        private void Execute(object sender, EventArgs e)
+        {
+            int N2 = int.Parse(selectN2.Text);
+            int N1 = int.Parse(selectN1.Text);
+            double phi = double.Parse(selectPhi.Text);
+
+            int k1 = 3 * N1 / 4;
+            int k2 = 3 * N2 / 4;
+
+            Core(rootMeanSquareDeltaChart1,
+                rootMeanSquareDeltaChart2,
+                amplitudesDeltaChart,
+                new[] { N1, N2 },
+                new[] { k1, k2 },
+                phi / 180 * Math.PI);
         }
     }
 }

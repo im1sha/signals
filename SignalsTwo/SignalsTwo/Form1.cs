@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -12,6 +13,10 @@ namespace SignalsTwo
         #region const 
         private const double ROOT_OF_2_DIVIDED_BY_2
             = 0.707; //Math.Sqrt(2) / 2;
+
+        private static readonly CultureInfo APP_LOCALIZATION 
+            = new CultureInfo("en-US");
+
 
         #endregion
 
@@ -148,9 +153,9 @@ namespace SignalsTwo
 
         private void Execute(object sender, EventArgs e)
         {
-            int N2 = int.Parse(selectN2.Text);
-            int N1 = int.Parse(selectN1.Text);
-            double phi = double.Parse(selectPhi.Text);
+            int N2 = int.Parse(selectN2.Text, APP_LOCALIZATION);
+            int N1 = int.Parse(selectN1.Text, APP_LOCALIZATION);
+            double phi = double.Parse(selectPhi.Text, APP_LOCALIZATION);
 
             int k1 = 3 * N1 / 4;
             int k2 = 3 * N2 / 4;

@@ -42,7 +42,8 @@ def main():
             re_x += y[i] * math.cos(2 * math.pi * i / M)
             im_x += y[i] * math.sin(2 * math.pi * i / M)
 
-        amp = 1 - 2 * math.sqrt(math.pow(re_x / M, 2) + math.pow(-im_x / M, 2))
+        amp = 1 - (math.sqrt(math.pow(2 / M * re_x, 2)
+                             + math.pow(2 / M * im_x, 2)))
 
         rms_a = square_root_of_2 - math.sqrt(xn_square_sum / (M + 1))
         rms_b = (square_root_of_2

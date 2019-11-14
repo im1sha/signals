@@ -3,7 +3,7 @@ import numpy as np
 
 
 def draw_chart(K, max_M, delta_amplitude, delta_root_mean_square_a, delta_root_mean_square_b):
-    fig, ax = plt.subplots(3, 1)
+    fig, ax = plt.subplots(3, 1, figsize=(10, 15))
 
     x = np.linspace(K, max_M, max_M - K)
 

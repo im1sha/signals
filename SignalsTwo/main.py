@@ -2,6 +2,14 @@ from drawer import draw_chart
 import math
 
 
+def get_sin_part(frequency, n, N, phi):
+    return math.sin((2 * frequency * math.pi * n) / N + phi)
+
+
+def get_cos_part(frequency, n, N, phi):
+    return math.cos((2 * frequency * math.pi * n) / N + phi)
+
+
 # N: 64, 128, 256 etc
 # n: 0..M
 # K < N
@@ -26,7 +34,7 @@ def main():
         y = []
 
         for n in range(M):
-            xn = math.sin((2 * frequency * math.pi * n) / N + phi)
+            xn = get_sin_part(frequency, n, N, phi)
             y.append(xn)
             xn_sum += xn
             xn_square_sum += math.pow(xn, 2)
@@ -35,8 +43,8 @@ def main():
         im_x = 0
 
         for i in range(M):
-            re_x += y[i] * math.cos(2 * math.pi * i / M)
-            im_x += y[i] * math.sin(2 * math.pi * i / M)
+            re_x += get_cos_part(frequency, i, M, phi) * y[i]
+            im_x += get_sin_part(frequency, i, M, phi) * y[i]
 
         amp = 1 - (math.sqrt(math.pow(2 / M * re_x, 2)
                              + math.pow(2 / M * im_x, 2)))

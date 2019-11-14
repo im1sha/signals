@@ -30,14 +30,14 @@ def main():
 
     for M in range(K, max_M):
         xn_sum = 0
-        xn_square_sum = 0
+        xn_sum_of_squares = 0
         y = []
 
         for n in range(M):
             xn = get_sin_part(frequency, n, N, phi)
             y.append(xn)
             xn_sum += xn
-            xn_square_sum += math.pow(xn, 2)
+            xn_sum_of_squares += math.pow(xn, 2)
 
         re_x = 0
         im_x = 0
@@ -46,17 +46,13 @@ def main():
             re_x += get_cos_part(frequency, i, M, phi) * y[i]
             im_x += get_sin_part(frequency, i, M, phi) * y[i]
 
-        amp = 1 - (math.sqrt(math.pow(2 / M * re_x, 2)
-                             + math.pow(2 / M * im_x, 2)))
+        amp = math.sqrt(math.pow(2 / M * re_x, 2) + math.pow(2 / M * im_x, 2))
+        rms_a = math.sqrt(xn_sum_of_squares / (M + 1))
+        rms_b = rms_a - math.pow(xn_sum / (M + 1), 2)
 
-        rms_a = square_root_of_2 - math.sqrt(xn_square_sum / (M + 1))
-        rms_b = (square_root_of_2
-                 - math.sqrt((xn_square_sum / (M + 1))
-                             - math.pow(xn_sum / (M + 1), 2)))
-
-        delta_amplitude.append(amp)
-        delta_root_mean_square_a.append(rms_a)
-        delta_root_mean_square_b.append(rms_b)
+        delta_amplitude.append(1 - amp)
+        delta_root_mean_square_a.append(square_root_of_2 - rms_a)
+        delta_root_mean_square_b.append(square_root_of_2 - rms_b)
 
     draw_chart(K, max_M, delta_amplitude, delta_root_mean_square_a, delta_root_mean_square_b)
 

@@ -3,12 +3,14 @@ import numpy as np
 import math
 
 
-# n 0..M
+# N: 64, 128, 256 etc
+# n: 0..M
 # K < N
+# M: K..2N
 def main():
     phi = 0
     N = 64
-    K = 2
+    K = 2  # int(3 * N / 4)
 
     max_M = 5 * N
 
@@ -40,20 +42,25 @@ def main():
             re_x += y[i] * math.cos(2 * math.pi * i / M)
             im_x += y[i] * math.sin(2 * math.pi * i / M)
 
-        a_sin = 1 - 2 * math.sqrt(math.pow(re_x / M, 2) + math.pow(-im_x / M, 2))
-        x_sin = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))))
-        x_sin_square = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))) - math.pow((xn_sum / (M + 1)), 2))
-        amplitude.append(a_sin)
-        delta_root_mean_square_a.append(x_sin)
-        delta_root_mean_square_b.append(x_sin_square)
+        amp = 1 - 2 * math.sqrt(math.pow(re_x / M, 2) + math.pow(-im_x / M, 2))
+
+        rms_a = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))))
+        rms_b = (square_root_of_2
+                 - (math.sqrt((xn_square_sum / (M + 1)))
+                    - math.pow((xn_sum / (M + 1)), 2)))
+
+        amplitude.append(amp)
+        delta_root_mean_square_a.append(rms_a)
+        delta_root_mean_square_b.append(rms_b)
 
     x = np.linspace(K, max_M, max_M - K)
     x1 = np.linspace(0, max_M, max_M - 1)
 
-    ax[0][0].set_ylim(-1, 1)
-    ax[0][1].set_ylim(-1, 1.10)
-    ax[1][0].set_ylim(-1, 1)
-    ax[1][1].set_ylim(-1, 1)
+    interval = 1.25
+    ax[0][0].set_ylim(-interval, interval)
+    ax[0][1].set_ylim(-interval, interval)
+    ax[1][0].set_ylim(-interval, interval)
+    ax[1][1].set_ylim(-interval, interval)
 
     ax[0][0].plot(x1, y)
     ax[0][1].plot(x, amplitude)

@@ -3,61 +3,67 @@ import numpy as np
 import math
 
 
+# n 0..M
+# K < N
 def main():
+    phi = 0
     N = 64
     K = 2
-    # xSin = 0
-    # xSinSquare = 0
-    # aSin = 0
-    f = 1
-    fi = 0
-    A = []
-    SKZa = []
-    SKZb = []
-    fig, a = plt.subplots(2, 2)
-    for M in range(K, 5 * N):
-        xnSum = 0
-        xnSquareSum = 0
+
+    max_M = 5 * N
+
+    square_root_of_2 = 0.707
+    frequency = 1
+
+    amplitude = []
+    delta_root_mean_square_a = []
+    delta_root_mean_square_b = []
+
+    fig, ax = plt.subplots(2, 2)
+    y = []
+
+    for M in range(K, max_M):
+        xn_sum = 0
+        xn_square_sum = 0
         y = []
+
         for n in range(M):
-            xn = math.sin((2 * f * math.pi * n) / N + fi)
+            xn = math.sin((2 * frequency * math.pi * n) / N + phi)
             y.append(xn)
-            xnSum += xn
-            xnSquareSum += math.pow(xn, 2)
+            xn_sum += xn
+            xn_square_sum += math.pow(xn, 2)
 
-        reX = 0
-        imX = 0
+        re_x = 0
+        im_x = 0
+
         for i in range(M):
-            reX += y[i] * math.cos(2 * math.pi * i / M)
-            imX += y[i] * math.sin(2 * math.pi * i / M)
+            re_x += y[i] * math.cos(2 * math.pi * i / M)
+            im_x += y[i] * math.sin(2 * math.pi * i / M)
 
-        aSin = 1 - 2 * math.sqrt(math.pow(reX / M, 2) + math.pow(-imX / M, 2))
-        xSin = 0.707 - (math.sqrt((xnSquareSum / (M + 1))))
-        xSinSquare = 0.707 - (math.sqrt((xnSquareSum / (M + 1))) - math.pow((xnSum / (M + 1)), 2))
-        A.append(aSin)
-        SKZa.append(xSin)
-        SKZb.append(xSinSquare)
+        a_sin = 1 - 2 * math.sqrt(math.pow(re_x / M, 2) + math.pow(-im_x / M, 2))
+        x_sin = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))))
+        x_sin_square = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))) - math.pow((xn_sum / (M + 1)), 2))
+        amplitude.append(a_sin)
+        delta_root_mean_square_a.append(x_sin)
+        delta_root_mean_square_b.append(x_sin_square)
 
-        # xSinPrev = xSin
-        # xSinSquarePrev = xSinSquare
-        # aSinPrev = aSin
-    x = np.linspace(K, 5 * N, 5 * N - K)
-    x1 = np.linspace(0, 5 * N, 5 * N - 1)
+    x = np.linspace(K, max_M, max_M - K)
+    x1 = np.linspace(0, max_M, max_M - 1)
 
-    a[0][0].set_ylim(-1, 1)
-    a[0][1].set_ylim(-1, 1.10)
-    a[1][0].set_ylim(-1, 1)
-    a[1][1].set_ylim(-1, 1)
+    ax[0][0].set_ylim(-1, 1)
+    ax[0][1].set_ylim(-1, 1.10)
+    ax[1][0].set_ylim(-1, 1)
+    ax[1][1].set_ylim(-1, 1)
 
-    a[0][0].plot(x1, y)
-    a[0][1].plot(x, A)
-    a[1][0].plot(x, SKZa)
-    a[1][1].plot(x, SKZb)
+    ax[0][0].plot(x1, y)
+    ax[0][1].plot(x, amplitude)
+    ax[1][0].plot(x, delta_root_mean_square_a)
+    ax[1][1].plot(x, delta_root_mean_square_b)
 
-    a[0][0].set_title("Сигнал")
-    a[0][1].set_title("A")
-    a[1][0].set_title("СКЗ")
-    a[1][1].set_title("СКО")
+    ax[0][0].set_title("sin")
+    ax[0][1].set_title("amplitude")
+    ax[1][0].set_title("delta root mean square a")
+    ax[1][1].set_title("delta root mean square b")
 
     plt.show()
 

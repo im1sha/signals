@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
+from drawer import draw_chart
 import math
 
 
@@ -20,9 +19,6 @@ def main():
     delta_amplitude = []
     delta_root_mean_square_a = []
     delta_root_mean_square_b = []
-
-    fig, ax = plt.subplots(2, 2)
-    y = []
 
     for M in range(K, max_M):
         xn_sum = 0
@@ -54,26 +50,7 @@ def main():
         delta_root_mean_square_a.append(rms_a)
         delta_root_mean_square_b.append(rms_b)
 
-    x = np.linspace(K, max_M, max_M - K)
-    x1 = np.linspace(0, max_M, max_M - 1)
-
-    interval = 1.25
-    ax[0][0].set_ylim(-interval, interval)
-    ax[0][1].set_ylim(-interval, interval)
-    ax[1][0].set_ylim(-interval, interval)
-    ax[1][1].set_ylim(-interval, interval)
-
-    ax[0][0].plot(x1, y)
-    ax[0][1].plot(x, delta_amplitude)
-    ax[1][0].plot(x, delta_root_mean_square_a)
-    ax[1][1].plot(x, delta_root_mean_square_b)
-
-    ax[0][0].set_title("sin")
-    ax[0][1].set_title("delta amplitude")
-    ax[1][0].set_title("delta root mean square a")
-    ax[1][1].set_title("delta root mean square b")
-
-    plt.show()
+    draw_chart(K, max_M, delta_amplitude, delta_root_mean_square_a, delta_root_mean_square_b)
 
 
 if __name__ == "__main__":

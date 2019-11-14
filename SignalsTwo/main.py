@@ -10,14 +10,14 @@ import math
 def main():
     phi = 0
     N = 64
-    K = 2  # int(3 * N / 4)
+    K = 1  # int(3 * N / 4)
 
     max_M = 5 * N
 
     square_root_of_2 = 0.707
     frequency = 1
 
-    amplitude = []
+    delta_amplitude = []
     delta_root_mean_square_a = []
     delta_root_mean_square_b = []
 
@@ -44,12 +44,12 @@ def main():
 
         amp = 1 - 2 * math.sqrt(math.pow(re_x / M, 2) + math.pow(-im_x / M, 2))
 
-        rms_a = square_root_of_2 - (math.sqrt((xn_square_sum / (M + 1))))
+        rms_a = square_root_of_2 - math.sqrt(xn_square_sum / (M + 1))
         rms_b = (square_root_of_2
-                 - (math.sqrt((xn_square_sum / (M + 1)))
-                    - math.pow((xn_sum / (M + 1)), 2)))
+                 - math.sqrt((xn_square_sum / (M + 1))
+                             - math.pow(xn_sum / (M + 1), 2)))
 
-        amplitude.append(amp)
+        delta_amplitude.append(amp)
         delta_root_mean_square_a.append(rms_a)
         delta_root_mean_square_b.append(rms_b)
 
@@ -63,12 +63,12 @@ def main():
     ax[1][1].set_ylim(-interval, interval)
 
     ax[0][0].plot(x1, y)
-    ax[0][1].plot(x, amplitude)
+    ax[0][1].plot(x, delta_amplitude)
     ax[1][0].plot(x, delta_root_mean_square_a)
     ax[1][1].plot(x, delta_root_mean_square_b)
 
     ax[0][0].set_title("sin")
-    ax[0][1].set_title("amplitude")
+    ax[0][1].set_title("delta amplitude")
     ax[1][0].set_title("delta root mean square a")
     ax[1][1].set_title("delta root mean square b")
 

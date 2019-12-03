@@ -62,7 +62,7 @@ class FastFourierTransformer:
 
     def __transform(self, sequence):
         sequence_length = len(sequence)
-        if sequence_length != 1:
+        if sequence_length > 1:
             even = self.__transform(sequence[::2])
             odd = self.__transform(sequence[1::2])
             turning_ratios = [cmath.exp(-2j * cmath.pi * r / sequence_length) for r in range(sequence_length // 2)]

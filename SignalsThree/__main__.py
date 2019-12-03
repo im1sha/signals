@@ -6,13 +6,14 @@ from fourier_transform import DirectFourierTransformer, InverseFourierTransforme
 from graphs import GraphDrawer, Graph
 
 
+# test signal
 def generate_harmonic_sequence(length):
-    return [10 * math.cos(2 * math.pi * i / length) for i in range(length)]
+    return [30 * math.cos(2 * math.pi * i / length - 3 * math.pi / 4) for i in range(length)]
 
 
 def generate_polyharmonic_sequence(length):
     polyharmonics_count = 30
-    amplitudes = [1, 3, 5, 8, 10, 12, 16]
+    amplitudes = [3, 5, 6, 8, 10, 13, 16]
     phases = [math.pi / 6, math.pi / 4, math.pi / 3, math.pi / 2, 3 * math.pi / 4, math.pi]
     chosen_amplitudes = [random.choice(amplitudes) for _ in range(polyharmonics_count)]
     chosen_phases = [random.choice(phases) for _ in range(polyharmonics_count)]
@@ -97,13 +98,15 @@ def task_5(sequence_length, phase_filtering, low, high):
 
 def main():
 
-    length = 64
-    filter = 0.001
+    length_arg = 64
+    filter_arg = 0.001
+    low_arg = 10
+    high_arg = 20
 
-    task_2(length, filter)
-    task_3(length, filter)
-    task_4(length, filter)
-    task_5(length, filter, 0, 5)
+    task_2(length_arg, filter_arg)
+    task_3(length_arg, filter_arg)
+    task_4(length_arg, filter_arg)
+    task_5(length_arg, filter_arg, low_arg, high_arg)
 
 
 if __name__ == "__main__":

@@ -17,8 +17,7 @@ class GraphDrawer:
 
     def draw(self):
         graphs_count = len(self.__graph_drawers)
-        new_figure = pyplot.figure()
-
+        new_figure = pyplot.figure(figsize=(20, 10))
         for i, graph_drawer in enumerate(self.__graph_drawers):
             new_axes = new_figure.add_subplot(1, graphs_count, i + 1)
             pyplot.title(graph_drawer.name)
